@@ -1,40 +1,37 @@
 // app/page.tsx (Server Component)
 import { ChartBarHorizontal } from "@/components/chart-bar-horizontal";
 import { ChartLineDefault } from "@/components/default-line-chart";
+import { url } from "inspector";
 
 
 export default async function Home() {
+  const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
+  const url_diarias = process.env.URL_DIARIAS || "http://127.0.0.1:5000/diarias/valor-total"
+  const url_salarios = process.env.URL_SALARIOS || "http://127.0.0.1:5000/salarios/total-liquido"
+  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes"
 
-  const res_indenizacoes = await fetch("http://127.0.0.1:5000/indenizacoes/valor-total", {
-    cache: "no-store", // evita cache e garante dados atualizados
-  });
-  const res_salarios = await fetch("http://127.0.0.1:5000/salarios/total-liquido", {
-    cache: "no-store", // evita cache e garante dados atualizados
-  });
-  const res_diarias = await fetch("http://127.0.0.1:5000/diarias/valor-total", {
-  cache: "no-store", // evita cache e garante dados atualizados
-  });
-  const res_indenizacoes_tempo = await fetch("http://127.0.0.1:5000/indenizacoes", {
-  cache: "no-store", // evita cache e garante dados atualizados
-  });
+  
+  try {
+    // Fazendo fetch simultâneo
+    const [
+      resIndenizacoes,
+      resSalarios,
+      resDiarias,
+      resIndenizacoesTempo,
+    ] = await Promise.all([
+      fetch(url_indenizacoes),
+      fetch(url_salarios),
+      fetch(url_diarias),
+      fetch(url_indenizacoes_tempo),
+    ]);
 
-  let indenizacoes_tempo = []
-  let indenizacoes = []
-  let salarios = []
-  let diarias = []
-
-  if(res_indenizacoes.status === 200) {
-    indenizacoes = await res_indenizacoes.json();
-  }
-  if(res_salarios.status === 200) {
-    salarios = await res_salarios.json();
-  }
-  if(res_diarias.status === 200) {
-    diarias = await res_diarias.json();
-  }
-  if(res_indenizacoes_tempo.status === 200) {
-    indenizacoes_tempo = await res_indenizacoes_tempo.json();
-  }
+    // Convertendo para JSON
+    const [indenizacoes, salarios, diarias, indenizacoes_tempo] = await Promise.all([
+      resIndenizacoes.json(),
+      resSalarios.json(),
+      resDiarias.json(),
+      resIndenizacoesTempo.json(),
+    ]);
 
   return (
     <div className="flex flex-col gap-4 justify-center sm:flex-row sm:flex-wrap">
@@ -81,4 +78,8 @@ export default async function Home() {
       </div>
     </div>
   );
+  } catch (error) {
+    console.error("Erro ao buscar dados:", error);
+    return <p>Erro ao carregar os dados. Verifique o backend.</p>;
+  }
 }
