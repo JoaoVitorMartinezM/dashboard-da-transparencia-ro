@@ -1,8 +1,8 @@
 // app/page.tsx (Server Component)
 import { ChartBarHorizontal } from "@/components/chart-bar-horizontal";
 import { ChartLineDefault } from "@/components/default-line-chart";
-import { url } from "inspector";
 
+export const dynamic = "force-dynamic"; // força SSR
 
 export default async function Home() {
   const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
@@ -10,7 +10,6 @@ export default async function Home() {
   const url_salarios = process.env.URL_SALARIOS || "http://127.0.0.1:5000/salarios/total-liquido"
   const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes"
 
-  
   try {
     // Fazendo fetch simultâneo
     const [
@@ -19,10 +18,10 @@ export default async function Home() {
       resDiarias,
       resIndenizacoesTempo,
     ] = await Promise.all([
-      fetch(url_indenizacoes),
-      fetch(url_salarios),
-      fetch(url_diarias),
-      fetch(url_indenizacoes_tempo),
+      fetch(url_indenizacoes, { cache: "no-store" }),
+      fetch(url_salarios, { cache: "no-store" }),
+      fetch(url_diarias, { cache: "no-store" }),
+      fetch(url_indenizacoes_tempo, { cache: "no-store" }),
     ]);
 
     // Convertendo para JSON
