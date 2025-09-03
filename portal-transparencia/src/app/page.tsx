@@ -1,8 +1,6 @@
 // app/page.tsx (Server Component)
 import { ChartBarHorizontal } from "@/components/chart-bar-horizontal";
 import { ChartLineDefault } from "@/components/default-line-chart";
-import { url } from "inspector";
-
 
 export default async function Home() {
   const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
@@ -10,7 +8,6 @@ export default async function Home() {
   const url_salarios = process.env.URL_SALARIOS || "http://127.0.0.1:5000/salarios/total-liquido"
   const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes"
 
-  
   try {
     // Fazendo fetch simultâneo
     const [
