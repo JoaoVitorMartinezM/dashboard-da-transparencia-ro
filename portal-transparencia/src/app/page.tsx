@@ -1,20 +1,25 @@
 // app/page.tsx (Server Component)
 import { ChartBarHorizontal } from "@/components/chart-bar-horizontal";
 import { ChartLineDefault } from "@/components/default-line-chart";
+import { url } from "inspector";
 
 
 export default async function Home() {
+  const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
+  const url_diarias = process.env.URL_DIARIAS || "http://127.0.0.1:5000/diarias/valor-total"
+  const url_salarios = process.env.URL_SALARIOS || "http://127.0.0.1:5000/salarios/total-liquido"
+  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes"
 
-  const res_indenizacoes = await fetch("http://127.0.0.1:5000/indenizacoes/valor-total", {
+  const res_indenizacoes = await fetch(url_indenizacoes, {
     cache: "no-store", // evita cache e garante dados atualizados
   });
-  const res_salarios = await fetch("http://127.0.0.1:5000/salarios/total-liquido", {
+  const res_salarios = await fetch(url_salarios, {
     cache: "no-store", // evita cache e garante dados atualizados
   });
-  const res_diarias = await fetch("http://127.0.0.1:5000/diarias/valor-total", {
+  const res_diarias = await fetch(url_diarias, {
   cache: "no-store", // evita cache e garante dados atualizados
   });
-  const res_indenizacoes_tempo = await fetch("http://127.0.0.1:5000/indenizacoes", {
+  const res_indenizacoes_tempo = await fetch(url_indenizacoes_tempo, {
   cache: "no-store", // evita cache e garante dados atualizados
   });
 
