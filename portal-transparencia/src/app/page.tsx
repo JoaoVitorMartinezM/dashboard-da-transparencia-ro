@@ -35,7 +35,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col gap-4 justify-center sm:flex-row sm:flex-wrap">
       
-     <div className="w-[800]">
+     <div className="w-auto">
         {
           indenizacoes.length !== 0 &&
           <ChartBarHorizontal 
@@ -45,7 +45,7 @@ export default async function Home() {
           />
         }
       </div> 
-      <div className="w-[800]">
+      <div className="w-auto">
         {
           salarios.length !== 0 &&
           <ChartBarHorizontal 
@@ -55,7 +55,7 @@ export default async function Home() {
           />
         }
       </div>
-      <div className="w-[800]">
+      <div className="w-auto">
         {
           diarias.length !== 0 &&
           <ChartBarHorizontal 
@@ -65,7 +65,7 @@ export default async function Home() {
           />
         }
       </div>
-      <div className="w-[800px]">
+      <div className="w-auto">
         {
           indenizacoes_tempo.length !== 0 &&
           <ChartLineDefault 

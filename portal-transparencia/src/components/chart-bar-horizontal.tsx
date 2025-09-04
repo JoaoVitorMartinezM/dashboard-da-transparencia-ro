@@ -57,7 +57,7 @@ export function ChartBarHorizontal({ data, title, descripton }:BarRechartsProps)
   const categoryGap = Math.max(ROW_HEIGHT - BAR_SIZE, 0)
 
   return (
-    <Card className="w-full h-auto mx-4  sm:h-auto">
+    <Card className="h-auto mx-4  sm:h-auto">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{descripton}</CardDescription>

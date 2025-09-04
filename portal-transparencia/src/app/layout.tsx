@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -34,6 +34,11 @@ export const metadata: Metadata = {
   description: "Dashboard dos dados abertos de RO",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -67,7 +72,7 @@ export default async function RootLayout({
                   <FileChartColumnIncreasing /> Relatórios
                 </NavItem>
                 <NavItem href= "/sobre" >
-                  <Book /> Sobre
+                  <Book /> Documentação
                 </NavItem>
 
               </SheetContent>

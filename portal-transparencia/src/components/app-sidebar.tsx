@@ -24,7 +24,7 @@ const items = [
     icon: FileChartColumnIncreasing,
   },
   {
-    title: "Sobre",
+    title: "Documentação",
     url: "/sobre",
     icon: Book,
   },
