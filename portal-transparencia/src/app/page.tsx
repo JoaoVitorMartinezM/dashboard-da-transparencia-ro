@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic"; // força SSR
 export default async function Home() {
   const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
   const url_diarias = process.env.URL_DIARIAS || "http://127.0.0.1:5000/diarias/valor-total"
-  const url_salarios = process.env.URL_SALARIOS || "http://127.0.0.1:5000/salarios/total-liquido"
-  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes"
+  const url_salarios = process.env.URL_SALARIOS ? `${process.env.URL_SALARIOS}?order_by=salario&group_by=nome&ano=2023` : "http://127.0.0.1:5000/salarios/total-liquido?order_by=salario&group_by=nome&ano=2024"
+  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes/total-tempo"
 
   try {
     // Fazendo fetch simultâneo
@@ -33,29 +33,33 @@ export default async function Home() {
     ]);
 
   return (
-    <div className="flex flex-col gap-4 justify-center sm:flex-row sm:flex-wrap">
+    <div>
+      <h1 className="text-2xl p-8 font-bold text-(--chart-3)">Dashboard</h1>
+
+    <div className="flex flex-col justify-center content-center sm:flex-row sm:flex-wrap sm:w-[80vw] sm:justify-self-center">
+
       
-     <div className="w-auto">
+     <div className="w-auto mt-4 lg:w-1/2">
         {
           indenizacoes.length !== 0 &&
           <ChartBarHorizontal 
           data={indenizacoes.slice(0, 24)} 
-          title="Top 10 Deputados x Valor de Indenizações" 
+          title="Deputados x Valor de Indenizações" 
           descripton="Valor total gasto pelos deputados em indenizações."
           />
         }
       </div> 
-      <div className="w-auto">
+      <div className="w-auto mt-4 lg:w-1/2">
         {
           salarios.length !== 0 &&
           <ChartBarHorizontal 
           data={salarios.slice(0, 24)} 
-          title="Top 10 Salários x Deputado" 
+          title="Salários dos Deputados" 
           descripton="Valor líquido do salário dos deputados."
           />
         }
       </div>
-      <div className="w-auto">
+      <div className="w-auto mt-4 lg:w-1/2">
         {
           diarias.length !== 0 &&
           <ChartBarHorizontal 
@@ -65,16 +69,18 @@ export default async function Home() {
           />
         }
       </div>
-      <div className="w-auto">
+      <div className="w-auto mt-4 lg:w-1/2">
         {
           indenizacoes_tempo.length !== 0 &&
           <ChartLineDefault 
           data={indenizacoes_tempo} 
           title="Total Indenizações x Tempo" 
           description="Valor total por mês."
+          isDashboard={true}
           />
         }
       </div>
+    </div>
     </div>
   );
   } catch (error) {

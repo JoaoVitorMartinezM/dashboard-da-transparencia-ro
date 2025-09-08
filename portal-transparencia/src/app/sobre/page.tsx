@@ -3,7 +3,7 @@ import Image from "next/image";
 export default async function About() {
     return (
         <section className="p-8 flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Documentação</h1>
+            <h1 className="text-2xl font-bold text-(--chart-3)">Documentação</h1>
             <span className="font-light">Uma dashboard com informativos dos dados abertos do governo de Rondônia (RO).</span>
 
             <h2 className="text-xl font-bold">Schemas</h2>

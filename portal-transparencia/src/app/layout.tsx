@@ -55,7 +55,7 @@ export default async function RootLayout({
         >
           <div className="flex flex-row justify-items-center m-4 sm:hidden">
             <Sheet >
-              <SheetTrigger className="sm:hidden">
+              <SheetTrigger className="sm:hidden text-(--chart-3)">
                 <Menu/>
               </SheetTrigger>
               <SheetContent className="w-[300px] " side="left">
@@ -85,7 +85,7 @@ export default async function RootLayout({
               <div className="hidden sm:inline">
                 <SidebarTrigger size={"lg"} className="mx-2"/>
               </div>
-              <div className="absolute top-4 right-4 inline">
+              <div className="absolute top-4 right-4 inline text-(--chart-3)">
                 <ThemeToggle />
               </div>
 
