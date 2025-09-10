@@ -23,6 +23,7 @@ export type DropdownProps = {
     dropdownItems: { value: string, label: string }[]
     label: string
     placeHolder: string
+    value?: string
     onSelect?: (value: string) => void;
 }
 
@@ -37,7 +38,7 @@ export function Dropdown({ dropdownItems, label, placeHolder, onSelect }: Dropdo
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-[100px] md:w-[200px] justify-between"
                 >
                     {value
                         ? dropdownItems.find((item) => item.value === value)?.label
@@ -45,7 +46,7 @@ export function Dropdown({ dropdownItems, label, placeHolder, onSelect }: Dropdo
                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[150px] md:w-[200px] p-0">
                 <Command>
                     <CommandInput placeholder={placeHolder} />
                     <CommandList>

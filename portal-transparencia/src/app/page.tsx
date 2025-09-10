@@ -3,12 +3,19 @@ import { ChartBarHorizontal } from "@/components/chart-bar-horizontal";
 import { ChartLineDefault } from "@/components/default-line-chart";
 
 export const dynamic = "force-dynamic"; // força SSR
+const periodoMandato = {
+  inicio: "01-2023",
+  fim: "12-2026"
+}
+const anoAtual = new Date().getFullYear()
+const filtro_mandato = `?dt_inicio=${periodoMandato.inicio}&dt_fim=${periodoMandato.fim}`
+const filtro_salario = "&order_by=salario&group_by=nome"
 
 export default async function Home() {
-  const url_indenizacoes = process.env.URL_INDENIZACOES || "http://127.0.0.1:5000/indenizacoes/valor-total"
-  const url_diarias = process.env.URL_DIARIAS || "http://127.0.0.1:5000/diarias/valor-total"
-  const url_salarios = process.env.URL_SALARIOS ? `${process.env.URL_SALARIOS}?order_by=salario&group_by=nome&ano=2023` : "http://127.0.0.1:5000/salarios/total-liquido?order_by=salario&group_by=nome&ano=2024"
-  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO || "http://127.0.0.1:5000/indenizacoes/total-tempo"
+  const url_indenizacoes = process.env.URL_INDENIZACOES ? process.env.URL_INDENIZACOES + filtro_mandato : `http://127.0.0.1:5000/indenizacoes/valor-total${filtro_mandato}`
+  const url_diarias = process.env.URL_DIARIAS ? process.env.URL_DIARIAS + filtro_mandato : `http://127.0.0.1:5000/diarias/valor-total${filtro_mandato}`
+  const url_salarios = process.env.URL_SALARIOS ? `${process.env.URL_SALARIOS + filtro_mandato + filtro_salario}` : `http://127.0.0.1:5000/salarios/total-liquido${filtro_mandato}${filtro_salario}`
+  const url_indenizacoes_tempo = process.env.URL_INDENIZACOES_TEMPO ? process.env.URL_INDENIZACOES_TEMPO : `http://127.0.0.1:5000/indenizacoes/total-tempo`
 
   try {
     // Fazendo fetch simultâneo
@@ -45,7 +52,7 @@ export default async function Home() {
           <ChartBarHorizontal 
           data={indenizacoes.slice(0, 24)} 
           title="Deputados x Valor de Indenizações" 
-          descripton="Valor total gasto pelos deputados em indenizações."
+          descripton="Valor total gasto pelos deputados em indenizações no mandato."
           />
         }
       </div> 
@@ -55,7 +62,7 @@ export default async function Home() {
           <ChartBarHorizontal 
           data={salarios.slice(0, 24)} 
           title="Salários dos Deputados" 
-          descripton="Valor líquido do salário dos deputados."
+          descripton={`Somatória valor líquido do salário agrupado por deputados no ano de ${anoAtual}.`}
           />
         }
       </div>
@@ -65,7 +72,7 @@ export default async function Home() {
           <ChartBarHorizontal 
           data={diarias.slice(0, 10)} 
           title="Valor Total de Diárias x Deputado" 
-          descripton="Valor total gasto em diárias por deputado."
+          descripton="Valor total gasto em diárias por deputado no mandato."
           />
         }
       </div>

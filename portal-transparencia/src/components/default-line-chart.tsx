@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, X } from "lucide-react"
 import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import {
@@ -56,6 +56,18 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
   const [dtInicio, setDtInicio] = useState("")
   const [dtFim, setDtFim] = useState("")
   const [deputado, setDeputado] = useState("")
+  const [fixedTooltip, setFixedTooltip] = useState<null | { payload: any[]; label: string | undefined}>(null)
+
+
+  const resetFiltros = () => {
+    setAno("")
+    setDeputado("")
+    setDtFim("")
+    setDtInicio("")
+    setMes("")
+    setFixedTooltip(null)
+
+  }
 
   const aplicarFiltros = () => {
 
@@ -121,74 +133,72 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
         <CardDescription>{description}</CardDescription>
         {
           !isDashboard &&
-          <div className="flex justify-between px-4">
+          <div className="flex justify-between gap-2 md:px-4">
 
             <div className="flex gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="ano">Ano:</Label>
+                <Label htmlFor="ano" className="text-sm md:text:md">Ano:</Label>
                 <Input
-                id="ano"
-                className="max-w-sm"
-                placeholder="Digite o ano"
-                onChange={(e) => setAno(e.target.value)}
+                  id="ano"
+                  className="max-w-[100px] md:max-w-sm"
+                  placeholder="Digite o ano"
+                  value={ano}
+                  onChange={(e) => setAno(e.target.value)}
                 />
-                <Label htmlFor="mes">Mês:</Label>
-                <Dropdown 
-                dropdownItems={MONTHS.dropdownItems}
-                label="--Selecione--"
-                placeHolder="Busque pelo mês"
+                <Label htmlFor="mes" className="text-sm md:text:md">Mês:</Label>
+                <Dropdown
+                  dropdownItems={MONTHS.dropdownItems}
+                  label="--Selecione--"
+                  placeHolder="Busque pelo mês"
                   onSelect={(currentValue) => {
                     setMes(currentValue)
-                  }} />
+                  }}
+                />
 
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="dt_inicio">Data Início:</Label>
+                <Label htmlFor="dt_inicio" className="text-sm md:text:md">Data Início:</Label>
                 <Input
-                id="dt_inicio"
-                className="max-w-sm"
-                placeholder="Digite a data de início"
-                onChange={(e) => setDtInicio(e.target.value)}
+                  id="dt_inicio"
+                  className="max-w-sm"
+                  value={dtInicio}
+                  placeholder="Digite a data de início"
+                  onChange={(e) => setDtInicio(e.target.value)}
                 />
 
-                <Label htmlFor="dt_fim">Data Fim:</Label>
+                <Label htmlFor="dt_fim" className="text-sm md:text:md">Data Fim:</Label>
                 <Input
-                id="dt_fim"
-                className="max-w-sm"
-                placeholder="Digite a data de fim"
-                onChange={(e) => setDtFim(e.target.value)}
+                  id="dt_fim"
+                  className="max-w-sm"
+                  value={dtFim}
+                  placeholder="Digite a data de fim"
+                  onChange={(e) => setDtFim(e.target.value)}
                 />
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <Label htmlFor="deputados">Busca:</Label>
+              {/* <Label htmlFor="deputados">Busca:</Label> */}
               <div className="flex flex-col gap-2">
                 {/* <Input
                 id="deputados"
                   placeholder="Busque pelos deputados..."
                   onChange={(e) => setDeputado(e.target.value)}
                 /> */}
-                <Dropdown 
-                dropdownItems={deputados.map(dep => ({ value: dep, label: dep }))}
-                label="--Selecione--"
-                placeHolder="Busque pelo deputado"
-                onSelect={(currentValue) => {
+                <Dropdown
+                  dropdownItems={deputados.map(dep => ({ value: dep, label: dep }))}
+                  label="--Selecione--"
+                  placeHolder="Busque pelo deputado"
+                  value={deputado}
+                  onSelect={(currentValue) => {
                     setDeputado(currentValue)
-                }} />
-                <Button 
-                className="hover:bg-cyan-500 transition duration-150"
-                onClick={aplicarFiltros}>Buscar</Button>
+                  }} />
                 <Button
-                className="bg-(--destructive) hover:bg-red-500 transition duration-700" 
-                onClick={() => {
-                  setAno("")
-                  setDeputado("")
-                  setDtFim("")
-                  setDtInicio("")
-                  setMes("")
-                  aplicarFiltros()
-                }}>Reset</Button>
+                  className="hover:bg-cyan-500 transition duration-150"
+                  onClick={aplicarFiltros}>Buscar</Button>
+                <Button
+                  className="bg-(--destructive) hover:bg-red-500 transition duration-700"
+                  onClick={resetFiltros}>Reset</Button>
               </div>
 
             </div>
@@ -208,6 +218,15 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
               top: 0,
               bottom: 0
             }}
+            onClick={(e) => {
+              if (e && e.activePayload) {
+                // salva o ponto clicado
+                setFixedTooltip({
+                  payload: e.activePayload,
+                  label: e.activeLabel,
+                })
+              }
+            }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -220,11 +239,11 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
                 console.log(value)
                 const date = new Date(value)
                 const labelFormatted = date.toLocaleDateString("pt-BR", {
-                month: "2-digit",
-                year: "numeric",
-                timeZone: "UTC",
+                  month: "2-digit",
+                  year: "numeric",
+                  timeZone: "UTC",
                 })
-                
+
                 return labelFormatted
               }}
             />
@@ -238,35 +257,34 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
             />
             <ChartTooltip
               cursor={false}
+              position={{ x: 600, y: -50 }}
               content={({ active, payload, label }) => {
+                // Se tiver tooltip fixo, mostra ele
+                if (fixedTooltip) {
+                  payload = fixedTooltip.payload
+                  label = fixedTooltip.label
+                  active = true
+                }
                 if (!active || !payload) return null
 
-                // Formatando a data (label = time)
-                const date = new Date(label)
-                const labelFormatted = date.toLocaleDateString("pt-BR", {
-                  month: "2-digit",
-                  year: "numeric",
-                  timeZone: "UTC",
-                })
-
                 return (
-                  <div className="rounded-lg border bg-background p-2 shadow-md">
-                    <div className="mb-1 text-sm font-medium">{labelFormatted}</div>
-                    {payload.map((entry: any, i: number) => (
-                      <div key={`item-${i}`} className="flex items-center gap-2 text-sm">
-                        {/* bolinha colorida */}
-                        <span
-                          className="h-3 w-3 rounded-full"
-                          style={{ backgroundColor: entry.color }}
-                        />
-                        <span className="font-medium">{entry.name}:</span>
-                        <span>
-                          {entry.value.toLocaleString("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          })}
-                        </span>
-                      </div>
+                  <div className="rounded-lg border bg-background p-2 shadow-md max-h-48 overflow-y-auto" style={{ pointerEvents: "auto" }}>
+                    <div className="mb-1 text-sm font-medium">{label}</div>
+                    {payload.map((entry, i) => (
+                        entry.name && entry.payload?.[entry.name] &&
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <span
+                              className="h-3 w-3 rounded-full"
+                              style={{ backgroundColor: entry.color }}
+                            />
+                            <span className="font-medium">{entry.name}:</span>
+                            <span>
+                              {entry.payload[entry.name].toLocaleString("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                              })}
+                            </span>
+                          </div>
                     ))}
                   </div>
                 )

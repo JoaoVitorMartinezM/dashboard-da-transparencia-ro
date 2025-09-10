@@ -53,7 +53,7 @@ export default async function Reports({ searchParams }: SearchParamsProps) {
                     
 
                 </div>
-                <div className="container mx-auto gap-8 w-1/2">
+                <div className="w-full md:container md:mx-auto md:gap-8 md:w-1/2">
                     <ChartLineDefault
                         data={salarios}
                         title="Relatório Salário dos Deputados"
