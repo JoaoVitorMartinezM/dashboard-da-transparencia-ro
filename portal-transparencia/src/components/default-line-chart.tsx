@@ -150,6 +150,7 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
                   dropdownItems={MONTHS.dropdownItems}
                   label="--Selecione--"
                   placeHolder="Busque pelo mês"
+                  valueState={mes}
                   onSelect={(currentValue) => {
                     setMes(currentValue)
                   }}
@@ -189,7 +190,7 @@ export function ChartLineDefault({ title, description, data, isDashboard = false
                   dropdownItems={deputados.map(dep => ({ value: dep, label: dep }))}
                   label="--Selecione--"
                   placeHolder="Busque pelo deputado"
-                  value={deputado}
+                  valueState={deputado}
                   onSelect={(currentValue) => {
                     setDeputado(currentValue)
                   }} />

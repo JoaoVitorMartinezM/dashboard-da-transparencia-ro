@@ -23,11 +23,11 @@ export type DropdownProps = {
     dropdownItems: { value: string, label: string }[]
     label: string
     placeHolder: string
-    value?: string
+    valueState?: string
     onSelect?: (value: string) => void;
 }
 
-export function Dropdown({ dropdownItems, label, placeHolder, onSelect }: DropdownProps) {
+export function Dropdown({ dropdownItems, label, placeHolder,valueState, onSelect }: DropdownProps) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
@@ -40,8 +40,8 @@ export function Dropdown({ dropdownItems, label, placeHolder, onSelect }: Dropdo
                     aria-expanded={open}
                     className="w-[100px] md:w-[200px] justify-between"
                 >
-                    {value
-                        ? dropdownItems.find((item) => item.value === value)?.label
+                    {valueState
+                        ? dropdownItems.find((item) => item.value === valueState)?.label
                         : label}
                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -69,7 +69,7 @@ export function Dropdown({ dropdownItems, label, placeHolder, onSelect }: Dropdo
                                     <CheckIcon
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === item.value ? "opacity-100" : "opacity-0"
+                                            valueState === item.value ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                     {item.label}
